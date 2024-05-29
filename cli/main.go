@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/saratkumar-yb/infra/aws"
-	"github.com/saratkumar-yb/infra/helpers"
+	"github.com/saratkumar-yb/infra/cli/aws"
+	"github.com/saratkumar-yb/infra/cli/helpers"
 )
 
 func main() {

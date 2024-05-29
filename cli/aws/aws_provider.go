@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/saratkumar-yb/infra/helpers"
+	"github.com/saratkumar-yb/infra/cli/helpers"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
