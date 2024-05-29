@@ -29,6 +29,10 @@ inputs = {
     {
       name = "aws_region"
       type = "S"
+    },
+    {
+      name = "friendly_name"
+      type = "S"
     }
   ]
   global_secondary_indexes = [
@@ -50,6 +54,11 @@ inputs = {
     {
       name            = "AWSRegionIndex"
       hash_key        = "aws_region"
+      projection_type = "ALL"
+    },
+    {
+      name            = "FriendlyNameIndex"
+      hash_key        = "friendly_name"
       projection_type = "ALL"
     }
   ]

@@ -46,14 +46,13 @@ resource "aws_lambda_function" "lambda" {
   }
 }
 
-resource "aws_cloudwatch_event_rule" "every_15_minutes" {
-  name        = "every-15-minutes"
-  description = "Trigger Lambda every 15 minutes"
-  schedule_expression = "rate(15 minutes)"
+resource "aws_cloudwatch_event_rule" "trigger_lambda_weekdays" {
+  name                = "RunLambdaEvery30MinutesWeekdays"
+  schedule_expression = "cron(0,30 * ? * MON-FRI *)"
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
-  rule      = aws_cloudwatch_event_rule.every_15_minutes.name
+  rule      = aws_cloudwatch_event_rule.trigger_lambda_weekdays.name
   target_id = "lambda"
   arn       = aws_lambda_function.lambda.arn
 }
@@ -63,5 +62,5 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.every_15_minutes.arn
+  source_arn    = aws_cloudwatch_event_rule.trigger_lambda_weekdays.arn
 }
