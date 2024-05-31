@@ -60,6 +60,10 @@ jobs:
         with:
           path: .
 
+      - name: Build yb_infra CLI
+        run: |
+          ls -lR
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
