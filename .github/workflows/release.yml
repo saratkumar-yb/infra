@@ -25,19 +25,24 @@ jobs:
         with:
           go-version: '1.16'
 
+      - name: Change to CLI directory
+        run: cd cli
+
       - name: Build yb_infra CLI
         run: |
+          cd cli
           GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o yb_infra_${{ matrix.os }}_${{ matrix.arch }} main.go
 
       - name: Create tarball
         run: |
+          cd cli
           tar -czvf yb_infra_${{ matrix.os }}_${{ matrix.arch }}.tar.gz yb_infra_${{ matrix.os }}_${{ matrix.arch }}
 
       - name: Upload tarball as artifact
         uses: actions/upload-artifact@v2
         with:
           name: yb_infra_${{ matrix.os }}_${{ matrix.arch }}_tarball
-          path: yb_infra_${{ matrix.os }}_${{ matrix.arch }}.tar.gz
+          path: cli/yb_infra_${{ matrix.os }}_${{ matrix.arch }}.tar.gz
 
   release:
     needs: build
@@ -53,6 +58,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: yb_infra_*.tar.gz
+          files: cli/yb_infra_*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
