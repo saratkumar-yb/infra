@@ -60,13 +60,24 @@ jobs:
         with:
           path: .
 
-      - name: Build yb_infra CLI
+      - name: Move artifacts to root
         run: |
-          ls -lR
+          mv yb_infra_darwin_amd64_tarball/yb_infra_darwin_amd64.tar.gz .
+          mv yb_infra_darwin_arm64_tarball/yb_infra_darwin_arm64.tar.gz .
+          mv yb_infra_linux_amd64_tarball/yb_infra_linux_amd64.tar.gz .
+          mv yb_infra_linux_arm64_tarball/yb_infra_linux_arm64.tar.gz .
+          mv yb_infra_windows_amd64_tarball/yb_infra_windows_amd64.tar.gz .
+          mv yb_infra_windows_arm64_tarball/yb_infra_windows_arm64.tar.gz .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: yb_infra_*.tar.gz
+          files: |
+            yb_infra_darwin_amd64.tar.gz
+            yb_infra_darwin_arm64.tar.gz
+            yb_infra_linux_amd64.tar.gz
+            yb_infra_linux_arm64.tar.gz
+            yb_infra_windows_amd64.tar.gz
+            yb_infra_windows_arm64.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
