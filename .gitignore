@@ -23,8 +23,6 @@ bootstrap
 
 # Go workspace file
 go.work
-go.mod
-go.sum
 
 # Terraform
 .idea
@@ -34,7 +32,5 @@ terraform.tfstate
 .terraform
 .terraform.lock.hcl
 pkg
-go.mod
-go.sum
 .DS_Store
 .*swp
