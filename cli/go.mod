@@ -1,6 +1,6 @@
 module yb_infra
 
-go 1.21
+go 1.21.3
 
 require (
 	github.com/aws/aws-sdk-go v1.53.13
