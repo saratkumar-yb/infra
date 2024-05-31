@@ -12,7 +12,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("expected 'create-schedule', 'list-schedules', 'delete-schedule' or 'get-schedule' subcommands")
+		printHelp()
 		os.Exit(1)
 	}
 
@@ -128,7 +128,24 @@ func main() {
 		}
 
 	default:
-		fmt.Println("expected 'create-schedule', 'list-schedules', 'delete-schedule' or 'get-schedule' subcommands")
+		printHelp()
 		os.Exit(1)
 	}
+}
+
+func printHelp() {
+	fmt.Println("yb_infra CLI")
+	fmt.Println("Usage:")
+	fmt.Println("  yb_infra [command]")
+	fmt.Println("")
+	fmt.Println("Available Commands:")
+	fmt.Println("  create-schedule   Create a new schedule for an instance")
+	fmt.Println("  list-schedules    List all schedules")
+	fmt.Println("  delete-schedule   Delete a schedule by instance ID")
+	fmt.Println("  get-schedule      Get a schedule by instance ID or friendly name")
+	fmt.Println("")
+	fmt.Println("Flags:")
+	fmt.Println("  --cloud-type      Cloud provider type (aws, gcp, azure) (default \"aws\")")
+	fmt.Println("")
+	fmt.Println("Use \"yb_infra [command] --help\" for more information about a command.")
 }
