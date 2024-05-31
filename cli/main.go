@@ -12,7 +12,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("expected 'create-schedule', 'list-schedules' or 'delete-schedule' subcommands")
+		fmt.Println("expected 'create-schedule', 'list-schedules', 'delete-schedule' or 'get-schedule' subcommands")
 		os.Exit(1)
 	}
 
@@ -96,8 +96,39 @@ func main() {
 
 		provider.DeleteSchedule(*instanceID)
 
+	case "get-schedule":
+		getCmd := flag.NewFlagSet("get-schedule", flag.ExitOnError)
+		instanceID := getCmd.String("instance-id", "", "The ID of the instance")
+		friendlyName := getCmd.String("friendly-name", "", "The friendly name of the instance")
+		getCmd.StringVar(&cloudType, "cloud-type", "aws", "Cloud provider type (aws, gcp, azure)")
+		getCmd.Parse(os.Args[2:])
+
+		if *instanceID == "" && *friendlyName == "" {
+			getCmd.PrintDefaults()
+			os.Exit(1)
+		}
+
+		var provider helpers.CloudProvider
+		switch cloudType {
+		case "aws":
+			tableName, err := helpers.GetTableName()
+			if err != nil {
+				log.Fatalf("ERROR: %v", err)
+			}
+			provider = aws.AWSProvider{TableName: tableName}
+		default:
+			fmt.Println("Unsupported cloud provider type. Please specify 'aws'.")
+			os.Exit(1)
+		}
+
+		if *instanceID != "" {
+			provider.GetScheduleByInstanceID(*instanceID)
+		} else {
+			provider.GetScheduleByFriendlyName(*friendlyName)
+		}
+
 	default:
-		fmt.Println("expected 'create-schedule', 'list-schedules' or 'delete-schedule' subcommands")
+		fmt.Println("expected 'create-schedule', 'list-schedules', 'delete-schedule' or 'get-schedule' subcommands")
 		os.Exit(1)
 	}
 }

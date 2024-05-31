@@ -19,6 +19,8 @@ type CloudProvider interface {
 	CreateSchedule(instanceID, region, startTime, stopTime, timezone, friendlyName string)
 	ListSchedules()
 	DeleteSchedule(instanceID string)
+	GetScheduleByInstanceID(instanceID string)
+	GetScheduleByFriendlyName(friendlyName string)
 }
 
 var timezoneMapping = map[string]string{
