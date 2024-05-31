@@ -1,3 +1,64 @@
-Error: main.go:9:2: no required module provides package github.com/saratkumar-yb/infra/cli/aws: go.mod file not found in current directory or any parent directory; see 'go help modules'
-Error: main.go:10:2: no required module provides package github.com/saratkumar-yb/infra/cli/helpers: go.mod file not found in current directory or any parent directory; see 'go help modules'
-Error: Process completed with exit code 1.
+name: Build and Release yb_infra CLI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [linux, darwin, windows]
+        arch: [amd64, arm64]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
+      - name: Change to CLI directory
+        run: cd cli
+
+      - name: Build yb_infra CLI
+        run: |
+          cd cli
+          go mod tidy
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o yb_infra_${{ matrix.os }}_${{ matrix.arch }} main.go
+
+      - name: Create tarball
+        run: |
+          cd cli
+          tar -czvf yb_infra_${{ matrix.os }}_${{ matrix.arch }}.tar.gz yb_infra_${{ matrix.os }}_${{ matrix.arch }}
+
+      - name: Upload tarball as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: yb_infra_${{ matrix.os }}_${{ matrix.arch }}_tarball
+          path: cli/yb_infra_${{ matrix.os }}_${{ matrix.arch }}.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag' || github.event_name == 'push'
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: cli/yb_infra_*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
