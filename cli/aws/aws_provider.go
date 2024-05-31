@@ -94,7 +94,7 @@ func (a AWSProvider) ListSchedules() {
 			log.Fatalf("ERROR: Got error unmarshalling: %v", err)
 		}
 
-		log.Printf("INFO: Instance ID: %s, Start Time: %s, Stop Time: %s, Timezone: %s, AWS Region: %s, Friendly Name: %s",
+		fmt.Printf("Instance ID: %s, Start Time: %s, Stop Time: %s, Timezone: %s, AWS Region: %s, Friendly Name: %s\n",
 			schedule.InstanceID, schedule.StartTime, schedule.StopTime, schedule.Timezone, schedule.AWSRegion, schedule.FriendlyName)
 	}
 }
