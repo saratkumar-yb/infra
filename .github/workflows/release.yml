@@ -56,6 +56,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Fetch all tags
+        run: git fetch --tags
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
