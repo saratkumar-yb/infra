@@ -7,6 +7,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -68,7 +71,6 @@ jobs:
           mv yb_infra_linux_arm64_tarball/yb_infra_linux_arm64.tar.gz .
           mv yb_infra_windows_amd64_tarball/yb_infra_windows_amd64.tar.gz .
           mv yb_infra_windows_arm64_tarball/yb_infra_windows_arm64.tar.gz .
-          ls -lR
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -81,4 +83,4 @@ jobs:
             yb_infra_windows_amd64.tar.gz
             yb_infra_windows_arm64.tar.gz
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
