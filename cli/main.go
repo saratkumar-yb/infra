@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/saratkumar-yb/infra/cli/aws"
@@ -37,7 +38,11 @@ func main() {
 		var provider helpers.CloudProvider
 		switch cloudType {
 		case "aws":
-			provider = aws.AWSProvider{}
+			tableName, err := helpers.GetTableName()
+			if err != nil {
+				log.Fatalf("ERROR: %v", err)
+			}
+			provider = aws.AWSProvider{TableName: tableName}
 		default:
 			fmt.Println("Unsupported cloud provider type. Please specify 'aws'.")
 			os.Exit(1)
@@ -53,7 +58,11 @@ func main() {
 		var provider helpers.CloudProvider
 		switch cloudType {
 		case "aws":
-			provider = aws.AWSProvider{}
+			tableName, err := helpers.GetTableName()
+			if err != nil {
+				log.Fatalf("ERROR: %v", err)
+			}
+			provider = aws.AWSProvider{TableName: tableName}
 		default:
 			fmt.Println("Unsupported cloud provider type. Please specify 'aws'.")
 			os.Exit(1)
@@ -75,7 +84,11 @@ func main() {
 		var provider helpers.CloudProvider
 		switch cloudType {
 		case "aws":
-			provider = aws.AWSProvider{}
+			tableName, err := helpers.GetTableName()
+			if err != nil {
+				log.Fatalf("ERROR: %v", err)
+			}
+			provider = aws.AWSProvider{TableName: tableName}
 		default:
 			fmt.Println("Unsupported cloud provider type. Please specify 'aws'.")
 			os.Exit(1)

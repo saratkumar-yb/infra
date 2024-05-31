@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -49,4 +50,12 @@ func ResolveTimezone(abbreviation string) (string, error) {
 		return tz, nil
 	}
 	return "", fmt.Errorf("unsupported timezone abbreviation: %s", abbreviation)
+}
+
+func GetTableName() (string, error) {
+	tableName := os.Getenv("TABLE_NAME")
+	if tableName == "" {
+		return "", fmt.Errorf("TABLE_NAME environment variable is not set")
+	}
+	return tableName, nil
 }

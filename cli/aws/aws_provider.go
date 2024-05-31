@@ -3,7 +3,6 @@ package aws
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/saratkumar-yb/infra/cli/helpers"
 
@@ -14,9 +13,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-type AWSProvider struct{}
-
-var tableName = os.Getenv("TABLE_NAME")
+type AWSProvider struct {
+	TableName string
+}
 
 func (a AWSProvider) CreateSchedule(instanceID, region, startTime, stopTime, timezone, friendlyName string) {
 	tz, err := helpers.ResolveTimezone(timezone)
@@ -59,7 +58,7 @@ func (a AWSProvider) CreateSchedule(instanceID, region, startTime, stopTime, tim
 
 	input := &dynamodb.PutItemInput{
 		Item:      av,
-		TableName: aws.String(tableName),
+		TableName: aws.String(a.TableName),
 	}
 
 	_, err = svc.PutItem(input)
@@ -78,7 +77,7 @@ func (a AWSProvider) ListSchedules() {
 	svc := dynamodb.New(sess)
 
 	input := &dynamodb.ScanInput{
-		TableName: aws.String(tableName),
+		TableName: aws.String(a.TableName),
 	}
 
 	result, err := svc.Scan(input)
@@ -107,7 +106,7 @@ func (a AWSProvider) DeleteSchedule(instanceID string) {
 	svc := dynamodb.New(sess)
 
 	input := &dynamodb.DeleteItemInput{
-		TableName: aws.String(tableName),
+		TableName: aws.String(a.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"instance_id": {
 				S: aws.String(instanceID),
