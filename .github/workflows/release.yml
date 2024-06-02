@@ -84,5 +84,5 @@ jobs:
             yb_infra_linux_arm64.tar.gz
             yb_infra_windows_amd64.tar.gz
             yb_infra_windows_arm64.tar.gz
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GH_PAT }}
