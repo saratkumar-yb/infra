@@ -48,7 +48,7 @@ resource "aws_lambda_function" "lambda" {
 
 resource "aws_cloudwatch_event_rule" "trigger_lambda_weekdays" {
   name                = "RunLambdaEvery30MinutesWeekdays"
-  schedule_expression = "cron(0,30 * ? * MON-FRI *)"
+  schedule_expression = "cron(0,15,30,45 * ? * * *)"
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {

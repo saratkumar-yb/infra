@@ -82,6 +82,13 @@ func handler(ctx context.Context) {
 		ec2Svc := ec2.New(sess)
 
 		now := time.Now().In(loc)
+
+		// Skip weekends
+		if now.Weekday() == time.Saturday || now.Weekday() == time.Sunday {
+			fmt.Printf("Skipping instance %s in region %s because today is a weekend.\n", schedule.InstanceID, schedule.AWSRegion)
+			continue
+		}
+
 		currentDate := now.Format("2006-01-02")
 
 		startTime, err := time.ParseInLocation("2006-01-02 15:04", fmt.Sprintf("%s %s", currentDate, schedule.StartTime), loc)
